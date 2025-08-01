@@ -10,7 +10,7 @@ import { globalIgnores } from "eslint/config";
  * @type {import("eslint").Config}
  */
 export default tseslint.config([
-  globalIgnores(["dist"]),
+  globalIgnores(["dist", ".yarn"]),
   {
     files: ["**/*.{js,ts,tsx}"],
     extends: [

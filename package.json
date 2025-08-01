@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && NODE_ENV=production vite build",
+    "build": "NODE_ENV=production vite build",
     "lint": "eslint . --cache --cache-file ./node_modules/.cache/.eslintcache",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "react": "^19.1.0",
