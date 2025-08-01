@@ -2,12 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" href="favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Civic Compass</title>
+    <meta
+      name="description"
+      content="This tool helps you discover information about your Bangalore address including BBMP Ward details, Revenue classifications, and Police jurisdictions."
+    />
+    <link rel="stylesheet" src="/src/index.css" />
+    <link rel="manifest" href="manifest.json" />
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="flex min-h-screen flex-col bg-gray-50 font-sans antialiased">
+    <div id="root" class="flex h-full flex-col"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
