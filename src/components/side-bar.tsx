@@ -73,7 +73,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => (
         </ul>
       </div>
     </article>
-    <footer className="">
+    <footer className="py-2">
       <ul className="flex items-center justify-between text-sm text-gray-600">
         {footerLinks.map(({ href, displayName }) => (
           <ExternalLink
