@@ -1,6 +1,6 @@
-import { ExternalLink } from "./external-link";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
+import { ExternalLink } from "./external-link";
 
 describe("<ExternalLink>", () => {
   const text = "Example Link";

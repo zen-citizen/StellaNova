@@ -1,13 +1,14 @@
 import js from "@eslint/js";
-import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import globals from "globals";
 import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import importPlugin from "eslint-plugin-import";
+import { importX } from "eslint-plugin-import-x";
 import tseslint from "typescript-eslint";
 import { globalIgnores } from "eslint/config";
+import tsParser from "@typescript-eslint/parser";
 
 /**
  * @type {import("eslint").Config}
@@ -20,8 +21,8 @@ export default tseslint.config([
       js.configs.recommended,
       ...tseslint.configs.strictTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
-      importPlugin.flatConfigs.recommended,
-      importPlugin.flatConfigs.typescript,
+      importX.flatConfigs.recommended,
+      importX.flatConfigs.typescript,
       reactX.configs["recommended-typescript"],
       reactDom.configs.recommended,
       reactHooks.configs["recommended-latest"],
@@ -29,6 +30,7 @@ export default tseslint.config([
       eslintPluginPrettierRecommended,
     ],
     languageOptions: {
+      parser: tsParser,
       parserOptions: {
         project: ["./tsconfig.node.json", "./tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
@@ -44,18 +46,22 @@ export default tseslint.config([
       // but these are exceptions, not the norm
       // For the most part, we want to use types over interfaces
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+      "import-x/order": ["error"],
     },
   },
   {
     files: ["**/*.{js,cjs}"],
     extends: [
       tseslint.configs.disableTypeChecked,
-      importPlugin.flatConfigs.recommended,
+      importX.flatConfigs.recommended,
       eslintPluginPrettierRecommended,
     ],
     languageOptions: {
       globals: globals.node,
       ecmaVersion: "latest",
+    },
+    rules: {
+      "import-x/order": ["error"],
     },
   },
 ]);
