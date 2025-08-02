@@ -1,5 +1,5 @@
-import clsx from "clsx";
-import { ExternalLink } from "./external-link";
+import { clsx } from "clsx";
+import { ExternalLink } from "./external-link/external-link";
 
 export type DataSource = {
   href: string;
@@ -52,7 +52,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => (
         </p>
         <ul className="mt-2 flex flex-col gap-y-3 text-sm">
           {dataSources.map(({ href, displayName }) => (
-            <li>
+            <li key={href}>
               <ExternalLink
                 className={clsx([
                   "underline",
@@ -77,6 +77,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => (
       <ul className="flex items-center justify-between text-sm text-gray-600">
         {footerLinks.map(({ href, displayName }) => (
           <ExternalLink
+            key={href}
             href={href}
             className={clsx([
               "underline",
