@@ -16,17 +16,23 @@ import tsParser from "@typescript-eslint/parser";
 export default tseslint.config([
   globalIgnores(["dist", ".yarn"]),
   {
+    /* All React and TS / TSX file specific rules */
     files: ["**/*.{ts,tsx}"],
     extends: [
+      // basic JS / TS related best practices
       js.configs.recommended,
       ...tseslint.configs.strictTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
+      // import related best practices
       importX.flatConfigs.recommended,
       importX.flatConfigs.typescript,
+      // react related lint rules
       reactX.configs["recommended-typescript"],
       reactDom.configs.recommended,
       reactHooks.configs["recommended-latest"],
       reactRefresh.configs.vite,
+      // formatting comes last, should be applied
+      // after all other lint autofixes have beenapplied
       eslintPluginPrettierRecommended,
     ],
     languageOptions: {
@@ -35,7 +41,7 @@ export default tseslint.config([
         project: ["./tsconfig.node.json", "./tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
-      ecmaVersion: 2020,
+      ecmaVersion: "latest",
       globals: globals.browser,
     },
     rules: {
@@ -46,10 +52,12 @@ export default tseslint.config([
       // but these are exceptions, not the norm
       // For the most part, we want to use types over interfaces
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+      // we want some predictable ordering and grouping of imports
       "import-x/order": ["error"],
     },
   },
   {
+    /* JS specific rules, apply to config files that are still in JS */
     files: ["**/*.{js,cjs}"],
     extends: [
       tseslint.configs.disableTypeChecked,
@@ -61,6 +69,7 @@ export default tseslint.config([
       ecmaVersion: "latest",
     },
     rules: {
+      // we want some predictable ordering and grouping of imports
       "import-x/order": ["error"],
     },
   },
