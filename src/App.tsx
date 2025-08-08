@@ -1,4 +1,8 @@
+import { IntlProvider } from "react-intl";
 import { Sidebar, type DataSource } from "./components";
+import { messages } from "./i18n";
+
+const userLocale = "en";
 
 const dataSources: DataSource[] = [
   {
@@ -32,11 +36,13 @@ const footerLinks: DataSource[] = [
 
 function App() {
   return (
-    <div className="relative isolate h-full min-h-screen">
-      {/* Sidebar  */}
-      <Sidebar {...{ footerLinks, dataSources }} />
-      <div className=""></div>
-    </div>
+    <IntlProvider locale={userLocale} messages={messages[userLocale]}>
+      <div className="relative isolate h-full min-h-screen">
+        {/* Sidebar  */}
+        <Sidebar {...{ footerLinks, dataSources }} />
+        <div className=""></div>
+      </div>
+    </IntlProvider>
   );
 }
 

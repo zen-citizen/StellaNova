@@ -1,0 +1,9 @@
+{
+  "sidebar.title": "Civic Compass – Bengaluru",
+  "sidebar.externalLink": "Zen Citizen",
+  "sidebar.description": "If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police stations for your area.",
+  "sidebar.instruction": "Enter the <b>exact address</b> you need information for.",
+  "sidebar.disclaimer": "This tool is only for Bengaluru at this time.",
+  "sidebar.dataSources.title": "Data Sources",
+  "sidebar.dataSources.description": "We pull information from Government records. While we strive for accuracy, these sources can sometimes be incomplete or outdated."
+}
