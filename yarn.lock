@@ -2498,7 +2498,7 @@ react-dom@^19.1.0:
   dependencies:
     scheduler "^0.26.0"
 
-react-intl@^7.1.11:
+react-intl@7.1.11:
   version "7.1.11"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-7.1.11.tgz#6155602c46621ad9b67dd31750d00908e1e0b516"
   integrity sha512-tnVoRCWvW5Ie2ikYSdPF7z3+880yCe/9xPmitFeRPw3RYDcCfR4m8ZYa4MBq19W4adt9Z+PQA4FaMBCJ7E+HCQ==
