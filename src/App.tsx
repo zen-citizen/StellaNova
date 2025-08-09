@@ -1,8 +1,7 @@
 import { IntlProvider } from "react-intl";
 import { Sidebar, type DataSource } from "./components";
+import { useHtmlLang } from "./hooks/useHtmlLang";
 import { messages } from "./i18n";
-
-const userLocale = "en";
 
 const dataSources: DataSource[] = [
   {
@@ -35,6 +34,7 @@ const footerLinks: DataSource[] = [
 ];
 
 function App() {
+  const userLocale = useHtmlLang();
   return (
     <IntlProvider locale={userLocale} messages={messages[userLocale]}>
       <div className="relative isolate h-full min-h-screen">

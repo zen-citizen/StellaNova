@@ -1,5 +1,7 @@
 import enLocale from "./locales/en.json";
 
-export const messages = {
+type Messages = Record<string, Record<string, string>>;
+
+export const messages: Messages = {
   en: enLocale,
 };
