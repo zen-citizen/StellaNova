@@ -4,7 +4,7 @@ import { ExternalLink } from "./external-link/external-link";
 
 export type DataSource = {
   href: string;
-  displayName: string;
+  displayKey: string;
 };
 
 type SidebarProps = {
@@ -59,7 +59,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => {
             <FormattedMessage id="sidebar.dataSources.description" />
           </p>
           <ul className="mt-2 flex flex-col gap-y-3 text-sm">
-            {dataSources.map(({ href, displayName }) => (
+            {dataSources.map(({ href, displayKey }) => (
               <li key={href}>
                 <ExternalLink
                   className={clsx([
@@ -74,7 +74,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => {
                   ])}
                   href={href}
                 >
-                  <FormattedMessage id={displayName} />
+                  <FormattedMessage id={displayKey} />
                 </ExternalLink>
               </li>
             ))}
@@ -83,7 +83,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => {
       </article>
       <footer className="py-2">
         <ul className="flex items-center justify-between text-sm text-gray-600">
-          {footerLinks.map(({ href, displayName }) => (
+          {footerLinks.map(({ href, displayKey }) => (
             <ExternalLink
               key={href}
               href={href}
@@ -98,7 +98,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => {
                 "focus-visible:delay-[0]",
               ])}
             >
-              <FormattedMessage id={displayName} />
+              <FormattedMessage id={displayKey} />
             </ExternalLink>
           ))}
         </ul>

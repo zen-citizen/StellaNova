@@ -1,40 +1,40 @@
 import { IntlProvider } from "react-intl";
 import { Sidebar, type DataSource } from "./components";
-import { useHtmlLang } from "./hooks/useHtmlLang";
 import { messages } from "./i18n";
+
+const userLocale = "en";
 
 const dataSources: DataSource[] = [
   {
     href: "https://opencity.in/data",
-    displayName: "dataSources.openCity",
+    displayKey: "dataSources.openCity",
   },
   {
     href: "https://kgis.ksrsac.in/kgis/",
-    displayName: "dataSources.karnatakaGIS",
+    displayKey: "dataSources.karnatakaGIS",
   },
   {
     href: "https://www.openstreetmap.org/about",
-    displayName: "dataSources.openStreetMap",
+    displayKey: "dataSources.openStreetMap",
   },
 ];
 
 const footerLinks: DataSource[] = [
   {
     href: "https://forms.gle/EmQiMpayciLdbww96",
-    displayName: "footer.error",
+    displayKey: "footer.error",
   },
   {
     href: "https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform",
-    displayName: "footer.volunteer",
+    displayKey: "footer.volunteer",
   },
   {
     href: "https://github.com/zen-citizen/StellaNova",
-    displayName: "footer.oss",
+    displayKey: "footer.oss",
   },
 ];
 
 function App() {
-  const userLocale = useHtmlLang();
   return (
     <IntlProvider locale={userLocale} messages={messages[userLocale]}>
       <div className="relative isolate h-full min-h-screen">
