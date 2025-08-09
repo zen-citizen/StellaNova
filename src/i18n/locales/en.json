@@ -5,5 +5,11 @@
   "sidebar.instruction": "Enter the <b>exact address</b> you need information for.",
   "sidebar.disclaimer": "This tool is only for Bengaluru at this time.",
   "sidebar.dataSources.title": "Data Sources",
-  "sidebar.dataSources.description": "We pull information from Government records. While we strive for accuracy, these sources can sometimes be incomplete or outdated."
+  "sidebar.dataSources.description": "We pull information from Government records. While we strive for accuracy, these sources can sometimes be incomplete or outdated.",
+  "dataSources.openCity": "OpenCity",
+  "dataSources.karnatakaGIS": "Karnataka-GIS",
+  "dataSources.openStreetMap": "OpenStreetMap",
+  "footer.error": "Report an Error",
+  "footer.volunteer": "Volunteer with Us",
+  "footer.oss": "Open Source"
 }

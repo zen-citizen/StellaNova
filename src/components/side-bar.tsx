@@ -74,7 +74,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => {
                   ])}
                   href={href}
                 >
-                  {displayName}
+                  <FormattedMessage id={displayName} />
                 </ExternalLink>
               </li>
             ))}
@@ -98,7 +98,7 @@ export const Sidebar = ({ dataSources, footerLinks }: SidebarProps) => {
                 "focus-visible:delay-[0]",
               ])}
             >
-              {displayName}
+              <FormattedMessage id={displayName} />
             </ExternalLink>
           ))}
         </ul>

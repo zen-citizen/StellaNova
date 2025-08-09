@@ -7,30 +7,30 @@ const userLocale = "en";
 const dataSources: DataSource[] = [
   {
     href: "https://opencity.in/data",
-    displayName: "OpenCity",
+    displayName: "dataSources.openCity",
   },
   {
     href: "https://kgis.ksrsac.in/kgis/",
-    displayName: "Karnataka-GIS",
+    displayName: "dataSources.karnatakaGIS",
   },
   {
     href: "https://www.openstreetmap.org/about",
-    displayName: "OpenStreetMap",
+    displayName: "dataSources.openStreetMap",
   },
 ];
 
 const footerLinks: DataSource[] = [
   {
     href: "https://forms.gle/EmQiMpayciLdbww96",
-    displayName: "Report an Error",
+    displayName: "footer.error",
   },
   {
     href: "https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform",
-    displayName: "Volunteer with Us",
+    displayName: "footer.volunteer",
   },
   {
     href: "https://github.com/zen-citizen/StellaNova",
-    displayName: "Open Source",
+    displayName: "footer.oss",
   },
 ];
 
