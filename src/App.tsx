@@ -1,42 +1,48 @@
+import { IntlProvider } from "react-intl";
 import { Sidebar, type DataSource } from "./components";
+import { messages } from "./i18n";
+
+const userLocale = "en";
 
 const dataSources: DataSource[] = [
   {
     href: "https://opencity.in/data",
-    displayName: "OpenCity",
+    displayKey: "dataSources.openCity",
   },
   {
     href: "https://kgis.ksrsac.in/kgis/",
-    displayName: "Karnataka-GIS",
+    displayKey: "dataSources.karnatakaGIS",
   },
   {
     href: "https://www.openstreetmap.org/about",
-    displayName: "OpenStreetMap",
+    displayKey: "dataSources.openStreetMap",
   },
 ];
 
 const footerLinks: DataSource[] = [
   {
     href: "https://forms.gle/EmQiMpayciLdbww96",
-    displayName: "Report an Error",
+    displayKey: "footer.error",
   },
   {
     href: "https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform",
-    displayName: "Volunteer with Us",
+    displayKey: "footer.volunteer",
   },
   {
     href: "https://github.com/zen-citizen/StellaNova",
-    displayName: "Open Source",
+    displayKey: "footer.oss",
   },
 ];
 
 function App() {
   return (
-    <div className="relative isolate h-full min-h-screen">
-      {/* Sidebar  */}
-      <Sidebar {...{ footerLinks, dataSources }} />
-      <div className=""></div>
-    </div>
+    <IntlProvider locale={userLocale} messages={messages[userLocale]}>
+      <div className="relative isolate h-full min-h-screen">
+        {/* Sidebar  */}
+        <Sidebar {...{ footerLinks, dataSources }} />
+        <div className=""></div>
+      </div>
+    </IntlProvider>
   );
 }
 
