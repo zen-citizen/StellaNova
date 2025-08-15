@@ -378,4 +378,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Playwright e2e test artifacts
+/test-results
+
 # End of https://www.toptal.com/developers/gitignore/api/go,node,visualstudiocode,react,macos,linux,windows,intellij+all,vim
