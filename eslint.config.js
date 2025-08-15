@@ -38,7 +38,11 @@ export default tseslint.config([
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
+        project: [
+          "./tsconfig.node.json",
+          "./tsconfig.app.json",
+          "./tsconfig.playwright.json",
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
       ecmaVersion: "latest",
