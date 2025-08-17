@@ -295,9 +295,8 @@ func getStringAttribute(data map[string]interface{}, name, key, valueDefault str
 		valueDefault = "Not available"
 	}
 
-	value := valueDefault
 	if dataValue, ok := data[key]; ok && dataValue != nil {
-		value = fmt.Sprintf("%v", dataValue)
+		value := fmt.Sprintf("%v", dataValue)
 		return &models.Attribute{
 			Name:    name,
 			Value:   value,

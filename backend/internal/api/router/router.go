@@ -7,6 +7,7 @@ import (
 	"backend/internal/config"
 	"backend/internal/services"
 	"backend/internal/utils"
+	"backend/internal/version"
 	"github.com/gin-gonic/gin"
 	"log/slog"
 
@@ -28,16 +29,21 @@ func Setup(cfg *config.Config, geoManager *utils.GeoJsonManager, logger *slog.Lo
 
 	entitiesHandler := handlers.NewEntitiesHandler(entitiesService, logger)
 
+	r.GET("/health", func(c *gin.Context) {
+		logger.DebugContext(c.Request.Context(), "health check accessed")
+		c.JSON(200, gin.H{
+			"status":     "up",
+			"build_time": version.GetBuildTime(),
+			"commit":     version.GetCommitSHA(),
+			"dependencies": gin.H{
+				"geojson": geoManager.GetAvailableLayers(),
+			},
+		})
+	})
+
 	api := r.Group("/api/v1")
 	{
 		api.GET("/entities", entitiesHandler.GetEntities)
-
-		api.GET("/health", func(c *gin.Context) {
-			logger.Debug("health check accessed")
-			c.JSON(200, gin.H{
-				"status": "up",
-			})
-		})
 	}
 
 	logger.Info("router setup")

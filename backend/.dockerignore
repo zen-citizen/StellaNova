@@ -1,0 +1,36 @@
+# ignore build artifacts
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# ignore test files
+*_test.go
+testdata/
+
+# ignore development files
+.env
+.env.local
+.env.development
+*.log
+
+# ignore version control
+.git/
+.gitignore
+
+# ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ignore documentation
+README.md
+docs/
+
+# ignore temporary files
+tmp/
+temp/
