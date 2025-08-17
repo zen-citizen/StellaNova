@@ -37,7 +37,6 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 			slog.String("lat", latStr),
 			slog.String("lng", lngStr),
 			slog.String("city", city),
-			slog.String("client_ip", c.ClientIP()),
 		)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "lat, lng, and city parameters are required",
@@ -90,7 +89,6 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 		slog.Float64("latitude", lat),
 		slog.Float64("longitude", lng),
 		slog.String("city", city),
-		slog.String("client_ip", c.ClientIP()),
 	)
 
 	resp, err := h.service.GetEntities(c.Request.Context(), req)
