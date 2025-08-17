@@ -56,19 +56,20 @@ jobs:
         working-directory: ./backend
         run: go test -race -v ./...
 
-      - name: build verification
+      - name: verify Docker build
         working-directory: ./backend
         run: |
+          echo "Testing Docker build..."
           COMMIT_SHA=$(git rev-parse --short HEAD)
           BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
           
-          go build \
-            -ldflags "-X 'backend/internal/version.commitSHA=$COMMIT_SHA' -X 'backend/internal/version.buildTime=$BUILD_TIME'" \
-            -o bin/backend \
-            ./cmd/server
+          docker build \
+            --build-arg COMMIT_SHA=$COMMIT_SHA \
+            --build-arg BUILD_TIME="$BUILD_TIME" \
+            -t backend:test \
+            .
           
-          # verify the binary works
-          ./bin/backend --help || echo "Binary built successfully"
+          echo "Docker build successful"
 
       - name: check assets directory
         run: |
