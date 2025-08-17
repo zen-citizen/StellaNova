@@ -17,6 +17,9 @@ func main() {
 
 	cfg := config.New()
 
+	cleanup := utils.SetupTracing("backend-service")
+	defer cleanup()
+
 	logger := utils.SetupLogger(cfg.LogLevel, cfg.LogFormat)
 	slog.SetDefault(logger)
 

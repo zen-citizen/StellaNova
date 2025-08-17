@@ -9,12 +9,15 @@ import (
 	"backend/internal/utils"
 	"github.com/gin-gonic/gin"
 	"log/slog"
+
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 func Setup(cfg *config.Config, geoManager *utils.GeoJsonManager, logger *slog.Logger) *gin.Engine {
 	gin.SetMode(cfg.GinMode)
 
 	r := gin.New()
+	r.Use(otelgin.Middleware("StellaNova-backend"))
 	r.Use(middleware.Logger(logger))
 
 	logger.Info("setting up http router")

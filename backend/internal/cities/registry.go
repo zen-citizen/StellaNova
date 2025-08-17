@@ -2,6 +2,7 @@ package cities
 
 import (
 	"backend/internal/utils"
+	"context"
 	"fmt"
 	"log/slog"
 )
@@ -30,17 +31,18 @@ func NewRegistry(geoManager *utils.GeoJsonManager, logger *slog.Logger) *Registr
 	return r
 }
 
-func (r *Registry) GetCityProvider(city string) (CityProvider, error) {
+func (r *Registry) GetCityProvider(ctx context.Context, city string) (CityProvider, error) {
 	provider, exists := r.cities[city]
 	if !exists {
-		r.logger.Warn("unsupported city requested",
+		r.logger.WarnContext(ctx,
+			"unsupported city requested",
 			slog.String("requested_city", city),
 			slog.Any("supported_cities", r.SupportedCities()),
 		)
 		return nil, fmt.Errorf("unsupported city: %s", city)
 	}
 
-	r.logger.Debug("City provider retrieved", slog.String("city", city))
+	r.logger.DebugContext(ctx, "City provider retrieved", slog.String("city", city))
 	return provider, nil
 }
 

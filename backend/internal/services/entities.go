@@ -27,7 +27,7 @@ func (s *EntitiesService) GetEntities(ctx context.Context, req *models.EntitiesR
 		slog.String("city", req.City),
 	)
 
-	cityProvider, err := s.cityRegistry.GetCityProvider(req.City)
+	cityProvider, err := s.cityRegistry.GetCityProvider(ctx, req.City)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "failed to get city provider",
 			slog.String("city", req.City),

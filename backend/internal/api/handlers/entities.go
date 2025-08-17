@@ -33,7 +33,8 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 	city := c.Query("city")
 
 	if latStr == "" || lngStr == "" {
-		h.logger.Warn("invalid location request - missing parameters",
+		h.logger.WarnContext(c.Request.Context(),
+			"invalid entities request - missing parameters",
 			slog.String("lat", latStr),
 			slog.String("lng", lngStr),
 			slog.String("city", city),
@@ -45,7 +46,7 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 	}
 
 	if city == "" {
-		h.logger.Info("city query param empty, using bengaluru")
+		h.logger.InfoContext(c.Request.Context(), "city query param empty, using bengaluru")
 		city = "bengaluru"
 	}
 
@@ -85,7 +86,8 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 		City:      city,
 	}
 
-	h.logger.Info("processing location request",
+	h.logger.InfoContext(c.Request.Context(),
+		"processing entities request",
 		slog.Float64("latitude", lat),
 		slog.Float64("longitude", lng),
 		slog.String("city", city),
@@ -93,7 +95,8 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 
 	resp, err := h.service.GetEntities(c.Request.Context(), req)
 	if err != nil {
-		h.logger.Error("location request failed",
+		h.logger.ErrorContext(c.Request.Context(),
+			"entities request failed",
 			slog.Float64("latitude", lat),
 			slog.Float64("longitude", lng),
 			slog.String("city", city),
@@ -105,7 +108,8 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 		return
 	}
 
-	h.logger.Info("Location request completed successfully",
+	h.logger.InfoContext(c.Request.Context(),
+		"entities request completed successfully",
 		slog.Float64("latitude", lat),
 		slog.Float64("longitude", lng),
 		slog.String("city", city),
