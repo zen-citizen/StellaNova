@@ -1,6 +1,7 @@
 import { IntlProvider } from "react-intl";
 import { Sidebar, type DataSource } from "./components";
 import { messages } from "./i18n";
+import { BlrMap } from "./components/blr-map";
 
 const userLocale = "en";
 
@@ -37,10 +38,14 @@ const footerLinks: DataSource[] = [
 function App() {
   return (
     <IntlProvider locale={userLocale} messages={messages[userLocale]}>
-      <div className="relative isolate h-full min-h-screen">
-        {/* Sidebar  */}
-        <Sidebar {...{ footerLinks, dataSources }} />
-        <div className=""></div>
+      <div className="flex justify-between">
+        <div className="relative isolate h-full min-h-screen">
+          {/* Sidebar  */}
+          <Sidebar {...{ footerLinks, dataSources }} />
+        </div>
+        <div className="-z-10 h-full w-full">
+          <BlrMap />
+        </div>
       </div>
     </IntlProvider>
   );
