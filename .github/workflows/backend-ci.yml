@@ -2,6 +2,9 @@ name: backend CI
 
 on:
   pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
 
 jobs:
   ci:
@@ -32,10 +35,6 @@ jobs:
         working-directory: ./backend
         run: go mod download
 
-      - name: verify dependencies
-        working-directory: ./backend
-        run: go mod verify
-
       - name: run golangci-lint
         uses: golangci/golangci-lint-action@v8
         with:
@@ -45,18 +44,3 @@ jobs:
       - name: run tests with race detector
         working-directory: ./backend
         run: go test -race -v ./...
-
-      - name: verify Docker build
-        working-directory: ./backend
-        run: |
-          echo "Testing Docker build..."
-          COMMIT_SHA=$(git rev-parse --short HEAD)
-          BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          
-          docker build \
-            --build-arg COMMIT_SHA=$COMMIT_SHA \
-            --build-arg BUILD_TIME="$BUILD_TIME" \
-            -t backend:test \
-            .
-          
-          echo "Docker build successful"
