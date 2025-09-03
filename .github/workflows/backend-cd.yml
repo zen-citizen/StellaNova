@@ -3,10 +3,9 @@ name: backend CD
 on:
   push:
     branches: [ main ]
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/backend
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-cd.yml'
 
 jobs:
   build-and-deploy:
@@ -49,60 +48,3 @@ jobs:
       - name: run tests with race detector
         working-directory: ./backend
         run: go test -race -v ./...
-
-      - name: set up build variables
-        id: vars
-        run: |
-          COMMIT_SHA=${GITHUB_SHA:0:7}
-          BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          
-          echo "COMMIT_SHA=$COMMIT_SHA" >> $GITHUB_OUTPUT
-          echo "BUILD_TIME=$BUILD_TIME" >> $GITHUB_OUTPUT
-
-      - name: set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: log in to Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value=${{ steps.vars.outputs.COMMIT_SHA }}
-
-      - name: build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./backend
-          platforms: linux/amd64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            COMMIT_SHA=${{ steps.vars.outputs.COMMIT_SHA }}
-            BUILD_TIME=${{ steps.vars.outputs.BUILD_TIME }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: generate deployment summary
-        run: |
-          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Commit SHA:** \`${{ steps.vars.outputs.COMMIT_SHA }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Build Time:** ${{ steps.vars.outputs.BUILD_TIME }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Docker Image:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.COMMIT_SHA }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Available Tags:" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY

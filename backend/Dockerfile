@@ -10,9 +10,9 @@ RUN go mod download
 COPY . .
 
 ARG COMMIT_SHA=unknown
-ARG BUILD_TIME=unknown
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+RUN BUILD_TIME=$(date '+%Y-%m-%d %H:%M:%S UTC') && \
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags "-w -s -X 'backend/internal/version.commitSHA=${COMMIT_SHA}' -X 'backend/internal/version.buildTime=${BUILD_TIME}'" \
     -o bin/backend \
     ./cmd/server
@@ -34,8 +34,5 @@ RUN chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 8080
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
 
 CMD ["./backend"]
