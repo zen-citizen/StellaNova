@@ -37,10 +37,12 @@ func TestGeoJsonFileLoading(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// Create temp file
 			tmpDir := t.TempDir()
 			testFile := filepath.Join(tmpDir, "test.geo.json")
-			os.WriteFile(testFile, []byte(tt.content), 0644)
+			writeFileErr := os.WriteFile(testFile, []byte(tt.content), 0644)
+			if writeFileErr != nil {
+				t.Fatalf("failed to create temp file: %v", writeFileErr)
+			}
 
 			manager := &GeoJsonManager{
 				data:   make(map[string]*geojson.FeatureCollection),
@@ -99,15 +101,24 @@ func TestPointInPolygonQueries(t *testing.T) {
 	}`
 
 	tmpDir := t.TempDir()
-	os.MkdirAll(filepath.Join(tmpDir, "test_city"), 0755)
+	err := os.MkdirAll(filepath.Join(tmpDir, "test_city"), 0755)
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
 	testFile := filepath.Join(tmpDir, "test_city", "test.geo.json")
-	os.WriteFile(testFile, []byte(geoJSON), 0644)
+	err = os.WriteFile(testFile, []byte(geoJSON), 0644)
+	if err != nil {
+		t.Fatalf("failed to write geojson file: %v", err)
+	}
 
 	manager := &GeoJsonManager{
 		data:   make(map[string]*geojson.FeatureCollection),
 		logger: slog.Default(),
 	}
-	manager.loadGeoJsonFile("test_city", "test", testFile)
+	err = manager.loadGeoJsonFile("test_city", "test", testFile)
+	if err != nil {
+		t.Fatalf("failed to load geojson file: %v", err)
+	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -144,15 +155,24 @@ func TestMultiPolygonSupport(t *testing.T) {
 	}`
 
 	tmpDir := t.TempDir()
-	os.MkdirAll(filepath.Join(tmpDir, "test_city"), 0755)
+	err := os.MkdirAll(filepath.Join(tmpDir, "test_city"), 0755)
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
 	testFile := filepath.Join(tmpDir, "test_city", "multi.geo.json")
-	os.WriteFile(testFile, []byte(geoJSON), 0644)
+	err = os.WriteFile(testFile, []byte(geoJSON), 0644)
+	if err != nil {
+		t.Fatalf("failed to write geojson file: %v", err)
+	}
 
 	manager := &GeoJsonManager{
 		data:   make(map[string]*geojson.FeatureCollection),
 		logger: slog.Default(),
 	}
-	manager.loadGeoJsonFile("test_city", "multi", testFile)
+	err = manager.loadGeoJsonFile("test_city", "multi", testFile)
+	if err != nil {
+		t.Fatalf("failed to load geojson file: %v", err)
+	}
 
 	tests := []struct {
 		name     string

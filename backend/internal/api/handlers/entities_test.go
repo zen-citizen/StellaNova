@@ -113,7 +113,10 @@ func TestGetEntitiesParameterValidation(t *testing.T) {
 
 			if tt.expectedError != "" {
 				var response map[string]string
-				json.Unmarshal(w.Body.Bytes(), &response)
+				err := json.Unmarshal(w.Body.Bytes(), &response)
+				if err != nil {
+					t.Fatalf("failed to parse response: %v", err)
+				}
 				if response["error"] != tt.expectedError {
 					t.Errorf("expected error '%s', got '%s'", tt.expectedError, response["error"])
 				}
@@ -174,7 +177,10 @@ func TestGetEntitiesServiceError(t *testing.T) {
 	}
 
 	var response map[string]string
-	json.Unmarshal(w.Body.Bytes(), &response)
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	if err != nil {
+		t.Fatalf("failed to parse response: %v", err)
+	}
 	if response["error"] != "failed to get entities" {
 		t.Errorf("expected error 'service error', got '%s'", response["error"])
 	}

@@ -64,7 +64,10 @@ func TestConfigDefaults(t *testing.T) {
 
 			// Set environment variables from envMap
 			for key, value := range tt.envMap {
-				os.Setenv(key, value)
+				err := os.Setenv(key, value)
+				if err != nil {
+					t.Fatalf("failed to set env var %s=%s: %v", key, value, err)
+				}
 			}
 
 			cfg := New()
