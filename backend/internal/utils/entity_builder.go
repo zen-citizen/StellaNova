@@ -11,7 +11,7 @@ import (
 
 type PropertyTransformer func(map[string]interface{}) ([]models.Attribute, error)
 
-func ExtractAttributes(ctx context.Context, geoManager *GeoJsonManager, lat, lng float64, city, layer string, transformer PropertyTransformer, logger *slog.Logger) []models.Attribute {
+func ExtractAttributes(ctx context.Context, geoManager GeoJsonManagerInterface, lat, lng float64, city, layer string, transformer PropertyTransformer, logger *slog.Logger) []models.Attribute {
 	geoData, err := geoManager.QueryPoint(ctx, lat, lng, city, layer)
 	if err != nil {
 		logger.ErrorContext(ctx, "failed to query geojson data",

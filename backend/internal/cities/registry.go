@@ -7,13 +7,17 @@ import (
 	"log/slog"
 )
 
+type RegistryInterface interface {
+	GetCityProvider(ctx context.Context, city string) (CityProvider, error)
+}
+
 type Registry struct {
 	cities     map[string]CityProvider
-	geoManager *utils.GeoJsonManager
+	geoManager utils.GeoJsonManagerInterface
 	logger     *slog.Logger
 }
 
-func NewRegistry(geoManager *utils.GeoJsonManager, logger *slog.Logger) *Registry {
+func NewRegistry(geoManager utils.GeoJsonManagerInterface, logger *slog.Logger) *Registry {
 	r := &Registry{
 		cities:     make(map[string]CityProvider),
 		logger:     logger,
@@ -24,7 +28,7 @@ func NewRegistry(geoManager *utils.GeoJsonManager, logger *slog.Logger) *Registr
 
 	r.logger.Info("City registry initialized",
 		slog.Int("registered_cities", len(r.cities)),
-		slog.Any("cities", r.SupportedCities()),
+		slog.Any("cities", r.supportedCities()),
 		slog.Any("available_layers", geoManager.GetAvailableLayers()),
 	)
 
@@ -37,7 +41,7 @@ func (r *Registry) GetCityProvider(ctx context.Context, city string) (CityProvid
 		r.logger.WarnContext(ctx,
 			"unsupported city requested",
 			slog.String("requested_city", city),
-			slog.Any("supported_cities", r.SupportedCities()),
+			slog.Any("supported_cities", r.supportedCities()),
 		)
 		return nil, fmt.Errorf("unsupported city: %s", city)
 	}
@@ -46,14 +50,10 @@ func (r *Registry) GetCityProvider(ctx context.Context, city string) (CityProvid
 	return provider, nil
 }
 
-func (r *Registry) SupportedCities() []string {
+func (r *Registry) supportedCities() []string {
 	cities := make([]string, 0, len(r.cities))
 	for city := range r.cities {
 		cities = append(cities, city)
 	}
 	return cities
-}
-
-func (r *Registry) GetGeoJSONManager() *utils.GeoJsonManager {
-	return r.geoManager
 }

@@ -10,10 +10,10 @@ import (
 
 type BengaluruProvider struct {
 	logger     *slog.Logger
-	geoManager *utils.GeoJsonManager
+	geoManager utils.GeoJsonManagerInterface
 }
 
-func NewBangaloreProvider(geoManager *utils.GeoJsonManager, logger *slog.Logger) *BengaluruProvider {
+func NewBangaloreProvider(geoManager utils.GeoJsonManagerInterface, logger *slog.Logger) *BengaluruProvider {
 	return &BengaluruProvider{
 		logger:     logger,
 		geoManager: geoManager,

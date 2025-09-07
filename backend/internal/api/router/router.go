@@ -14,7 +14,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
-func Setup(cfg *config.Config, geoManager *utils.GeoJsonManager, logger *slog.Logger) *gin.Engine {
+func Setup(cfg *config.Config, geoManager utils.GeoJsonManagerInterface, logger *slog.Logger) *gin.Engine {
 	gin.SetMode(cfg.GinMode)
 
 	r := gin.New()
