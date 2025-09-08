@@ -1,12 +1,12 @@
-import Map, { Marker } from "@vis.gl/react-maplibre";
+import { Map as MapComponent, Marker } from "@vis.gl/react-maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Bangalore coordinates
 const bangaloreCoordinates = [12.9716, 77.5946]; // [latitude, longitude]
 
-export const BlrMap = () => {
+export const CityMap = () => {
   return (
-    <Map
+    <MapComponent
       initialViewState={{
         longitude: bangaloreCoordinates[1],
         latitude: bangaloreCoordinates[0],
@@ -18,6 +18,6 @@ export const BlrMap = () => {
         longitude={bangaloreCoordinates[1]}
         latitude={bangaloreCoordinates[0]}
       />
-    </Map>
+    </MapComponent>
   );
 };
