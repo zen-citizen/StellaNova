@@ -12,6 +12,11 @@ import (
 	"strings"
 )
 
+type GeoJsonManagerInterface interface {
+	QueryPoint(ctx context.Context, lat, lng float64, city, layer string) (map[string]interface{}, error)
+	GetAvailableLayers() map[string][]string
+}
+
 type GeoJsonManager struct {
 	data   map[string]*geojson.FeatureCollection
 	logger *slog.Logger

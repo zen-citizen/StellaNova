@@ -9,7 +9,8 @@ RUN go mod download
 
 COPY . .
 
-ARG COMMIT_SHA=unknown
+ARG RAILWAY_GIT_COMMIT_SHA
+ARG COMMIT_SHA=${RAILWAY_GIT_COMMIT_SHA:-unknown}
 
 RUN BUILD_TIME=$(date '+%Y-%m-%d %H:%M:%S UTC') && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \

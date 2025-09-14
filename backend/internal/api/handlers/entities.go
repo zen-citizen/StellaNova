@@ -16,11 +16,11 @@ const MaxLongitude = 180.0
 const MinLongitude = -180.0
 
 type EntitiesHandler struct {
-	service *services.EntitiesService
+	service services.EntitiesServiceInterface
 	logger  *slog.Logger
 }
 
-func NewEntitiesHandler(service *services.EntitiesService, logger *slog.Logger) *EntitiesHandler {
+func NewEntitiesHandler(service services.EntitiesServiceInterface, logger *slog.Logger) *EntitiesHandler {
 	return &EntitiesHandler{
 		service: service,
 		logger:  logger,
@@ -103,7 +103,7 @@ func (h *EntitiesHandler) GetEntities(c *gin.Context) {
 			slog.Any("error", err),
 		)
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error": "failed to get entities",
 		})
 		return
 	}

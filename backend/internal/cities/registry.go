@@ -7,13 +7,18 @@ import (
 	"log/slog"
 )
 
+type RegistryInterface interface {
+	GetCityProvider(ctx context.Context, city string) (CityProvider, error)
+	SupportedCities() []string
+}
+
 type Registry struct {
 	cities     map[string]CityProvider
-	geoManager *utils.GeoJsonManager
+	geoManager utils.GeoJsonManagerInterface
 	logger     *slog.Logger
 }
 
-func NewRegistry(geoManager *utils.GeoJsonManager, logger *slog.Logger) *Registry {
+func NewRegistry(geoManager utils.GeoJsonManagerInterface, logger *slog.Logger) *Registry {
 	r := &Registry{
 		cities:     make(map[string]CityProvider),
 		logger:     logger,
@@ -52,8 +57,4 @@ func (r *Registry) SupportedCities() []string {
 		cities = append(cities, city)
 	}
 	return cities
-}
-
-func (r *Registry) GetGeoJSONManager() *utils.GeoJsonManager {
-	return r.geoManager
 }

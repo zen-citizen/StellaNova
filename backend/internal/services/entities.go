@@ -7,12 +7,16 @@ import (
 	"log/slog"
 )
 
+type EntitiesServiceInterface interface {
+	GetEntities(ctx context.Context, req *models.EntitiesRequest) (*models.EntitiesResponse, error)
+}
+
 type EntitiesService struct {
-	cityRegistry *cities.Registry
+	cityRegistry cities.RegistryInterface
 	logger       *slog.Logger
 }
 
-func NewEntitiesService(cityRegistry *cities.Registry, logger *slog.Logger) *EntitiesService {
+func NewEntitiesService(cityRegistry cities.RegistryInterface, logger *slog.Logger) *EntitiesService {
 	logger.Info("entities service initialized")
 	return &EntitiesService{
 		cityRegistry: cityRegistry,

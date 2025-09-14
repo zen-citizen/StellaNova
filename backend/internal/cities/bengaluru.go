@@ -10,10 +10,10 @@ import (
 
 type BengaluruProvider struct {
 	logger     *slog.Logger
-	geoManager *utils.GeoJsonManager
+	geoManager utils.GeoJsonManagerInterface
 }
 
-func NewBangaloreProvider(geoManager *utils.GeoJsonManager, logger *slog.Logger) *BengaluruProvider {
+func NewBangaloreProvider(geoManager utils.GeoJsonManagerInterface, logger *slog.Logger) *BengaluruProvider {
 	return &BengaluruProvider{
 		logger:     logger,
 		geoManager: geoManager,
@@ -76,11 +76,7 @@ func (p *BengaluruProvider) GetEntities(ctx context.Context, lat, lng float64) (
 }
 
 func (p *BengaluruProvider) getGBAEntity(ctx context.Context, lat, lng float64) *models.Entity {
-	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "gba", func(props map[string]interface{}) ([]models.Attribute, error) {
-		attribute := getStringAttribute(props, "Corporation Name", "name", "")
-
-		return []models.Attribute{*attribute}, nil
-	}, p.logger)
+	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "gba", nil, p.logger)
 
 	entity := utils.BuildEntity(ctx, "GBA Corporation",
 		"This information is unavailable for this address. This could be because the area is outside GBA Corporation limits.",
@@ -216,13 +212,14 @@ func (p *BengaluruProvider) getBESCOMEntity(ctx context.Context, lat, lng float6
 
 	sectionAttrs := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "bescom_section", func(props map[string]interface{}) ([]models.Attribute, error) {
 		section := getStringAttribute(props, "Section", "name", "")
+		sectionAttributes := []models.Attribute{*section}
 
-		onmOffice := &models.Attribute{}
 		if onmData, ok := props["onm"].(map[string]interface{}); ok {
-			onmOffice = getAddressAttribute(onmData, "O&M Office", "om_office_name", "", "")
+			onmOffice := getAddressAttribute(onmData, "O&M Office", "om_office_name", "", "")
+			sectionAttributes = append(sectionAttributes, *onmOffice)
 		}
 
-		return []models.Attribute{*section, *onmOffice}, nil
+		return sectionAttributes, nil
 	}, p.logger)
 	attributes = append(attributes, sectionAttrs...)
 
