@@ -17,7 +17,7 @@ func TestRegistryInitialization(t *testing.T) {
 		t.Fatal("registry should not be nil")
 	}
 
-	cities := registry.supportedCities()
+	cities := registry.SupportedCities()
 	if len(cities) == 0 {
 		t.Error("registry should have at least one city")
 	}

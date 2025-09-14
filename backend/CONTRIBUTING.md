@@ -313,10 +313,61 @@ Now the same messy GeoJSON produces clean output:
 }
 ```
 
-
 ### Things to look out for
 
 1. **Set `IsFound` correctly**: Set to `true` when data exists, `false` when using defaults
 2. **Handle type assertions safely**: Always check `ok` when casting interface{} values
 3. **Keep transformers focused**: Each entity method should handle one logical boundary type
 4. **Entity separation**: Each entity should represent one department/service (e.g., separate entities for electricity and water supply, not combined)
+
+
+## Testing Your City Provider
+
+Your city provider will be automatically tested when you run the test suite.
+
+### How Testing Works
+
+The [test suite](internal/cities/all_providers_test.go) automatically:
+1. Discovers all registered city providers from the registry
+2. Scans your GeoJSON directory to find all layers
+3. Verifies your provider queries all layers
+4. Tests your provider with various data scenarios
+5. Ensures proper error handling and data quality
+
+### Running Tests
+
+```bash
+# Test all city providers (including yours)
+go test ./internal/cities -v
+
+# Test only your city (for debugging)
+go test ./internal/cities -v -run TestAllCityProviders/{your_city_name}
+```
+
+### What Gets Tested
+
+The universal test suite verifies:
+
+#### 1. Provider Properties
+- Name matches directory name
+- FormattedName is not empty
+- Bounds are valid (NE > SW, within Earth's coordinates)
+
+#### 2. Layer Coverage
+- All `.geo.json` files in your directory are queried
+- Provider doesn't skip any layers
+
+#### 3. Data Scenarios (for each layer)
+- **Nil response**: Point outside boundary
+- **Valid data**: Properly formatted properties
+- **Wrong types**: Strings instead of numbers, etc.
+- **Missing fields**: Some properties absent
+- **Null values**: Properties explicitly set to null
+- **Nested issues**: Malformed nested structures
+
+#### 4. Quality Checks
+- `IsFound=true` → `Value` must not be empty
+- `IsFound=false` → Should use default value (not empty)
+- `IsAvailable=false` → `NotAvailableMessage` must not be empty
+- No panics on any input
+- All entities returned even when unavailable
