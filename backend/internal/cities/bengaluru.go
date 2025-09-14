@@ -214,9 +214,8 @@ func (p *BengaluruProvider) getBESCOMEntity(ctx context.Context, lat, lng float6
 		section := getStringAttribute(props, "Section", "name", "")
 		sectionAttributes := []models.Attribute{*section}
 
-		onmOffice := &models.Attribute{}
 		if onmData, ok := props["onm"].(map[string]interface{}); ok {
-			onmOffice = getAddressAttribute(onmData, "O&M Office", "om_office_name", "", "")
+			onmOffice := getAddressAttribute(onmData, "O&M Office", "om_office_name", "", "")
 			sectionAttributes = append(sectionAttributes, *onmOffice)
 		}
 

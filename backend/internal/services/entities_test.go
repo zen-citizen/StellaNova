@@ -96,6 +96,10 @@ func (m *mockCityRegistry) GetCityProvider(ctx context.Context, city string) (ci
 	return m.provider, m.err
 }
 
+func (m *mockCityRegistry) SupportedCities() []string {
+	return []string{"bengaluru"}
+}
+
 type mockCityProvider struct {
 	entities []models.Entity
 	err      error
