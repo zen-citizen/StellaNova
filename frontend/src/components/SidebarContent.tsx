@@ -16,7 +16,7 @@ export default function SidebarContent() {
       </section>
 
       <section className="prose mt-6">
-        <h2 className="text-primary text-heading-xs">Data Sources</h2>
+        <h2 className="text-primary text-heading-xs">Data sources</h2>
         <p>
           We pull information from Government records. While we strive for
           accuracy, these sources can sometimes be incomplete or outdated.
