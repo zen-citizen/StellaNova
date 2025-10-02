@@ -4,7 +4,7 @@ import Sidebar from "./components/Sidebar"
 function App() {
   return (
     <div>
-      <div className="grid h-screen grid-rows-[1fr_auto] md:grid-cols-[360px_1fr] md:grid-rows-1">
+      <div className="grid h-screen grid-rows-[1fr_auto] md:grid-cols-[480px_1fr] md:grid-rows-1">
         <div className="hidden md:block">
           <Sidebar />
         </div>
