@@ -25,6 +25,10 @@
   --text-heading-s--line-height: 1.75rem; /* 28px */
   --text-heading-s--font-weight: 500;
 
+  --text-heading-xs: 1.125rem; /* 18px */
+  --text-heading-xs--line-height: 1.5625rem; /* 25px */
+  --text-heading-xs--font-weight: 500;
+
   /* Body */
 
   --text-body-l: 1.125rem; /* 18px */
@@ -71,4 +75,8 @@
   --color-inverted-primary: #f5f8fa;
   --color-inverted-secondary: #e1e6eb;
   --color-inverted-muted: #c9d1da;
+}
+
+.prose > * + * {
+  margin-top: 0.5em;
 }

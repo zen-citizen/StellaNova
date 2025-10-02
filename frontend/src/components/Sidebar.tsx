@@ -4,7 +4,7 @@ import SidebarHeader from "./SidebarHeader"
 
 export default function Sidebar() {
   return (
-    <aside className="border-separator bg-surface flex h-full flex-col border-t md:border-t-0 md:border-r">
+    <aside className="border-separator bg-surface flex h-full flex-col">
       <SidebarHeader />
 
       <div className="min-h-0 grow overflow-auto">
