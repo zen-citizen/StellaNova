@@ -1,1 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-sans:
+    "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+
+  /* Headings */
+
+  --text-heading-xl: 2.8125rem; /* 45px */
+  --text-heading-xl--line-height: 3.25rem; /* 52px */
+  --text-heading-xl--font-weight: 800;
+
+  --text-heading-l: 2.1875rem; /* 35px */
+  --text-heading-l--line-height: 2.75rem; /* 44px */
+  --text-heading-l--font-weight: 700;
+
+  --text-heading-m: 1.5rem; /* 24px */
+  --text-heading-m--line-height: 2rem; /* 32px */
+  --text-heading-m--font-weight: 600;
+
+  --text-heading-s: 1.25rem; /* 20px */
+  --text-heading-s--line-height: 1.75rem; /* 28px */
+  --text-heading-s--font-weight: 500;
+
+  /* Body */
+
+  --text-body-l: 1.125rem; /* 18px */
+  --text-body-l--line-height: 1.5625rem; /* 25px */
+
+  --text-body-m: 1rem; /* 16px */
+  --text-body-m--line-height: 1.5rem; /* 24px */
+
+  --text-body-s: 0.875rem; /* 14px */
+  --text-body-s--line-height: 1.25rem; /* 20px */
+
+  --text-body-xs: 0.75rem; /* 12px */
+  --text-body-xs--line-height: 1.125rem; /* 18px */
+
+  --text-cta-link: 1.125rem; /* 18px */
+  --text-cta-link--line-height: 1.75rem; /* 28px */
+
+  /* Spacing */
+
+  --spacing: 4px;
+
+  /* Colors */
+
+  --color-accent: #0c66e4;
+  --color-accent-dark: #0547a6;
+  --color-accent-light: #d6e9fa;
+  --color-accent-lighter: #f5f8fa;
+
+  --color-border: #d0d0d0;
+  --color-background: #f7f9fc;
+  --color-surface: #ffffff;
+
+  --color-success: #238551;
+  --color-warning: #eba700;
+  --color-error: #c44129;
+  --color-info: #0076b6;
+
+  /* Text Colors */
+
+  --color-primary: #172b4d;
+  --color-secondary: #626f86;
+  --color-muted: #626f86;
+
+  --color-inverted-primary: #f5f8fa;
+  --color-inverted-secondary: #e1e6eb;
+  --color-inverted-muted: #c9d1da;
+}
