@@ -1,8 +1,0 @@
-@import "tailwindcss";
-
-@layer base {
-  body,
-  html {
-    height: 100%;
-  }
-}
