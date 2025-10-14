@@ -1,4 +1,4 @@
-export default function SidebarContent() {
+function SidebarContent() {
   return (
     <div className="px-4 md:px-6 py-6">
       <section className="prose">
@@ -42,3 +42,5 @@ export default function SidebarContent() {
     </div>
   )
 }
+
+export default SidebarContent
