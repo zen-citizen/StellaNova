@@ -3,6 +3,7 @@ module backend
 go 1.23.5
 
 require (
+	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.10.1
 	github.com/joho/godotenv v1.5.1
 	github.com/paulmach/orb v0.11.1

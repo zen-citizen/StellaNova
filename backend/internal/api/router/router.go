@@ -8,6 +8,7 @@ import (
 	"backend/internal/services"
 	"backend/internal/utils"
 	"backend/internal/version"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log/slog"
 
@@ -18,6 +19,7 @@ func Setup(cfg *config.Config, geoManager utils.GeoJsonManagerInterface, logger 
 	gin.SetMode(cfg.GinMode)
 
 	r := gin.New()
+	r.Use(cors.Default())
 	r.Use(otelgin.Middleware("StellaNova-backend"))
 	r.Use(middleware.Logger(logger))
 
