@@ -1,4 +1,6 @@
 import useAppContext from "../hooks/useAppContext"
+import Accordion from "./Accordion"
+import Table from "./Table"
 
 function Details() {
   const { loading, error, data, setView } = useAppContext()
@@ -20,10 +22,18 @@ function Details() {
 
       {loading && <div>Loading...</div>}
       {error && <div className="text-red-500">{error}</div>}
-      {data && (
-        <pre className="whitespace-pre-wrap text-sm overflow-auto">
-          {JSON.stringify(data, null, 2)}
-        </pre>
+      {data && data.entities && (
+        <div className="divide-y divide-separator">
+          {data.entities.map((entity, index) => (
+            <Accordion
+              key={entity.name}
+              title={entity.name}
+              defaultOpen={index === 0}
+            >
+              <Table attributes={entity.attributes} />
+            </Accordion>
+          ))}
+        </div>
       )}
       {!loading && !error && !data && <div>No data available</div>}
     </div>

@@ -9,7 +9,7 @@ type AccordionProps = {
 
 function Accordion({ title, children, defaultOpen = false }: AccordionProps) {
   return (
-    <details className="group" open={defaultOpen}>
+    <details className="group py-2" open={defaultOpen}>
       <summary className="flex cursor-pointer items-center justify-between py-1 px-0">
         <h3 className="text-heading-xs font-medium text-primary">{title}</h3>
         <ChevronUp
