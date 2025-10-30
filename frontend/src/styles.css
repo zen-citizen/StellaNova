@@ -80,3 +80,8 @@
 .prose > * + * {
   margin-top: 0.5em;
 }
+
+/* Style MapLibre default marker via CSS */
+.maplibregl-marker svg path {
+  fill: var(--color-accent) !important;
+}
