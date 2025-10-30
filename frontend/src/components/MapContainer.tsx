@@ -27,6 +27,14 @@ function MapContainer() {
 
     mapRef.current = map
 
+    map.addControl(
+      new maplibregl.NavigationControl({ showCompass: false, showZoom: true }),
+      "top-right"
+    )
+
+    map.dragRotate.disable()
+    map.touchZoomRotate.disableRotation()
+
     map.on("click", (e) => {
       setLocation(
         Number(e.lngLat.lat.toFixed(5)),
