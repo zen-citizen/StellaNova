@@ -21,7 +21,7 @@ export type EntitiesResponse = {
   entities: Entity[]
 }
 
-export type ErrorResponse = {
+export type EntitiesError = {
   error: string
 }
 
@@ -31,3 +31,10 @@ export type Location = {
 }
 
 export type View = "introduction" | "details"
+
+export type AddressResponse = {
+  results: {
+    formatted_address: string
+  }[]
+  status: string
+}

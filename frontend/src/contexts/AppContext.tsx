@@ -1,9 +1,11 @@
 import { createContext, type ReactNode, useCallback, useState } from "react"
-import type { EntitiesResponse, ErrorResponse, Location, View } from "../types"
+import { fetchAddress, fetchEntities } from "../api"
+import type { Entity, Location, View } from "../types"
 
 type AppContextType = {
   location: Location | null
-  data: EntitiesResponse | null
+  entities: Entity[] | null
+  address: string | null
   loading: boolean
   error: string | null
   view: View
@@ -17,9 +19,14 @@ type AppProviderProps = {
   children: ReactNode
 }
 
+function getErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : "An unknown error occurred"
+}
+
 function AppProvider({ children }: AppProviderProps) {
   const [location, setLocationState] = useState<Location | null>(null)
-  const [data, setData] = useState<EntitiesResponse | null>(null)
+  const [entities, setEntities] = useState<Entity[] | null>(null)
+  const [address, setAddress] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [view, setView] = useState<View>("introduction")
@@ -30,35 +37,43 @@ function AppProvider({ children }: AppProviderProps) {
     setView("details")
     setLoading(true)
     setError(null)
-    setData(null)
+    setEntities(null)
+    setAddress(null)
 
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
-      const response = await fetch(
-        `${apiBaseUrl}/api/v1/entities?lat=${lat}&lng=${lng}&city=bengaluru`
-      )
+      const results = await Promise.allSettled([
+        fetchEntities(lat, lng),
+        fetchAddress(lat, lng)
+      ])
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      let firstError: string | null = null
+
+      if (results[0].status === "fulfilled") {
+        setEntities(results[0].value)
+      } else {
+        firstError = getErrorMessage(results[0].reason)
+        setEntities(null)
       }
 
-      const result = await response.json()
-
-      // Check if the response contains an error
-      if ("error" in result) {
-        const errorResponse = result as ErrorResponse
-        setError(errorResponse.error)
-        setData(null)
+      if (results[1].status === "fulfilled") {
+        setAddress(results[1].value)
       } else {
-        const entitiesResponse = result as EntitiesResponse
-        setData(entitiesResponse)
+        const errorMessage = getErrorMessage(results[1].reason)
+        if (!firstError) {
+          firstError = errorMessage
+        }
+        setAddress(null)
+      }
+
+      if (firstError) {
+        setError(firstError)
+      } else {
         setError(null)
       }
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred"
-      setError(errorMessage)
-      setData(null)
+      setError(getErrorMessage(err))
+      setEntities(null)
+      setAddress(null)
     } finally {
       setLoading(false)
     }
@@ -66,7 +81,8 @@ function AppProvider({ children }: AppProviderProps) {
 
   const value: AppContextType = {
     location,
-    data,
+    entities,
+    address,
     loading,
     error,
     view,
