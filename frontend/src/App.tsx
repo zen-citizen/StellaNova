@@ -1,4 +1,5 @@
 import MapContainer from "./components/MapContainer"
+import Search from "./components/Search"
 import Sidebar from "./components/Sidebar"
 
 function App() {
@@ -9,7 +10,10 @@ function App() {
           <Sidebar />
         </div>
 
-        <MapContainer />
+        <div className="relative">
+          <Search />
+          <MapContainer />
+        </div>
       </div>
 
       <div className="fixed bottom-0 z-10 h-[50dvh] max-h-[50dvh] w-full md:hidden">
