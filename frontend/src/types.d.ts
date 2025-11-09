@@ -32,6 +32,8 @@ export type Location = {
 
 export type View = "introduction" | "details"
 
+export type Source = "map" | "search"
+
 export type AddressResponse = {
   results: {
     formatted_address: string

@@ -38,7 +38,8 @@ function MapContainer() {
     map.on("click", (e) => {
       setLocation(
         Number(e.lngLat.lat.toFixed(5)),
-        Number(e.lngLat.lng.toFixed(5))
+        Number(e.lngLat.lng.toFixed(5)),
+        "map"
       )
     })
 

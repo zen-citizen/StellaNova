@@ -5,18 +5,16 @@ import {
   ComboboxOptions
 } from "@headlessui/react"
 import { Search as SearchIcon, X } from "lucide-react"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import useAppContext from "../hooks/useAppContext"
 import useAutocompleteSuggestions from "../hooks/useAutocompleteSuggestions"
 
 type AutocompleteSuggestion = google.maps.places.AutocompleteSuggestion
 
 function Search() {
-  const { setLocation } = useAppContext()
+  const { setLocation, source, address } = useAppContext()
 
   const [inputValue, setInputValue] = useState<string>("")
-  const [selectedSuggestion, setSelectedSuggestion] =
-    useState<AutocompleteSuggestion | null>(null)
   const { suggestions, resetSession } = useAutocompleteSuggestions(inputValue, {
     locationRestriction: {
       north: 13.5,
@@ -29,7 +27,6 @@ function Search() {
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setInputValue(event.target.value)
-      setSelectedSuggestion(null)
     },
     []
   )
@@ -39,7 +36,6 @@ function Search() {
       if (!suggestion) return
 
       setInputValue(suggestion.placePrediction!.text.text)
-      setSelectedSuggestion(suggestion)
 
       const place = suggestion.placePrediction!.toPlace()
       place
@@ -50,7 +46,7 @@ function Search() {
           const lat = place.location?.lat().toFixed(5)
           const lng = place.location?.lng().toFixed(5)
           if (lat && lng) {
-            setLocation(Number(lat), Number(lng))
+            setLocation(Number(lat), Number(lng), "search")
           }
 
           resetSession()
@@ -61,13 +57,18 @@ function Search() {
 
   const handleClear = useCallback(() => {
     setInputValue("")
-    setSelectedSuggestion(null)
     resetSession()
   }, [resetSession])
 
+  useEffect(() => {
+    if (source !== "search" && address) {
+      setInputValue(address)
+    }
+  }, [source, address])
+
   return (
     <div className="absolute top-4 left-6 right-18 z-50">
-      <Combobox value={selectedSuggestion} onChange={handleSelect}>
+      <Combobox onChange={handleSelect}>
         <div className="relative">
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
             <SearchIcon className="w-5 h-5 text-accent" />
@@ -75,9 +76,7 @@ function Search() {
           <ComboboxInput
             aria-label="Enter the exact address in Bengaluru"
             autoComplete="off"
-            displayValue={(suggestion: AutocompleteSuggestion | null) =>
-              suggestion ? suggestion.placePrediction!.text.text : inputValue
-            }
+            displayValue={() => inputValue}
             onChange={handleInput}
             className="w-full pl-10 pr-10 py-2.5 border border-separator rounded-lg bg-surface text-primary placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent shadow-sm"
             placeholder="Enter the exact address in Bengaluru"
