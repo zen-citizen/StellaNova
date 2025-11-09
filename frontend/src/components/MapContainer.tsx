@@ -66,7 +66,7 @@ function MapContainer() {
 
       map.flyTo({
         center: [location.lng, location.lat],
-        zoom: 12,
+        zoom: 14,
         speed: 1.5,
         curve: 1.6,
         easing: (t) => t
