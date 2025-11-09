@@ -16,7 +16,7 @@ function App() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 z-10 h-[50dvh] max-h-[50dvh] w-full md:hidden">
+      <div className="fixed bottom-0 h-[50dvh] max-h-[50dvh] w-full md:hidden">
         <Sidebar />
       </div>
     </div>

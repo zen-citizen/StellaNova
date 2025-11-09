@@ -75,6 +75,10 @@
   --color-inverted-primary: #f5f8fa;
   --color-inverted-secondary: #e1e6eb;
   --color-inverted-muted: #c9d1da;
+
+  /* Box Shadows */
+
+  --shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .prose > * + * {
@@ -89,4 +93,8 @@
 .maplibregl-ctrl.maplibregl-ctrl-group button {
   width: 40px;
   height: 40px;
+}
+
+.maplibregl-ctrl-top-right .maplibregl-ctrl {
+  margin-top: 16px;
 }

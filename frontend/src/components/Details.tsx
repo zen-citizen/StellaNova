@@ -27,7 +27,7 @@ function Details() {
         </div>
       )}
       {entities && (
-        <div className="divide-y divide-separator">
+        <div className="divide-y divide-separator w-full">
           {entities.map((entity, index) => (
             <Accordion
               key={entity.name}
