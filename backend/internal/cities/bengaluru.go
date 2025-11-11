@@ -97,7 +97,7 @@ func (p *BengaluruProvider) getBBMPEntity(ctx context.Context, lat, lng float64)
 		return []models.Attribute{*ward, *wardNumber, *zone, *division, *subdivision}, nil
 	}, p.logger)
 
-	disclaimer := "This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it's no longer the official structure."
+	disclaimer := "This information is based on the 198-ward classification, which BBMP used as a reference until the GBA was formed."
 
 	entity := utils.BuildEntity(ctx, "BBMP Information",
 		"This information is unavailable for this address. This could be because the area is outside BBMP limits.",
