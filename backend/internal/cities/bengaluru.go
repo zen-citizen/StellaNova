@@ -76,7 +76,10 @@ func (p *BengaluruProvider) GetEntities(ctx context.Context, lat, lng float64) (
 }
 
 func (p *BengaluruProvider) getGBAEntity(ctx context.Context, lat, lng float64) *models.Entity {
-	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "gba", nil, p.logger)
+	attributes := append(
+		utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "gba", nil, p.logger),
+		utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "gba_ward", nil, p.logger)...,
+	)
 
 	entity := utils.BuildEntity(ctx, "GBA Corporation",
 		"This information is unavailable for this address. This could be because the area is outside GBA Corporation limits.",
