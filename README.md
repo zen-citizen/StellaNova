@@ -12,7 +12,7 @@ To our horror, we also found there was no single place that helped citizens iden
 
 ## How can you help?
 > [!IMPORTANT]
-> We highly recommend opening an issue or [reaching out to us](https://forms.gle/X3Ttk7oBosq3MYFQ9) so that all efforts are aligned
+> We highly recommend opening an issue or [reaching out to us](https://forms.gle/X4Ttk7oBosq3MYFQ9) so that all efforts are aligned
 > 
 Civic Compass runs on three things
 1. a beautiful frontend
@@ -25,4 +25,4 @@ While we welcome and greatly appreciate contributions across all these areas, th
 
 **If you need to find the data:** Start with [Open City](https://data.opencity.in/dataset) for existing open datasets. If you can't find what you need there, we've included an [RTI template](RTI_TEMPLATE.md) that can help you request the information from government offices.
 
-Feel free to [reach out to us](https://forms.gle/X3Ttk7oBosq3MYFQ9) if you need help finding or understanding the data. We've been through this process before and can point you in the right direction.
+Feel free to [reach out to us](https://forms.gle/X4Ttk7oBosq3MYFQ9) if you need help finding or understanding the data. We've been through this process before and can point you in the right direction.
