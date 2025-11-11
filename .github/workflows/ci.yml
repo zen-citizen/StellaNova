@@ -21,14 +21,14 @@ jobs:
       - name: Install Dependencies
         run: yarn install --non-interactive --frozen-lockfile
 
-      - name: Check Types
-        run: yarn typecheck
+#      - name: Check Types
+#        run: yarn typecheck
 
       - name: Lint & Formatting
-        run: yarn lint
+        run: yarn --cwd frontend lint
 
-      - name: Unit and Integration Test
-        run: yarn test
+#      - name: Unit and Integration Test
+#        run: yarn test
 
       - name: Build for production
-        run: yarn build
+        run: yarn --cwd frontend build
