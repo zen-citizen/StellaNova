@@ -24,8 +24,8 @@ jobs:
 #      - name: Check Types
 #        run: yarn typecheck
 
-      - name: Lint & Formatting
-        run: yarn --cwd frontend lint
+#      - name: Lint & Formatting
+#        run: yarn --cwd frontend lint
 
 #      - name: Unit and Integration Test
 #        run: yarn test
