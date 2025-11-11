@@ -1,7 +1,10 @@
-name: "CD Pipeline"
+name: frontend CD
 on:
   push:
-    branches:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/cd.yml'
       - main
 
 concurrency:
@@ -20,7 +23,7 @@ jobs:
       - name: Setup Node JS
         uses: actions/setup-node@v4
         with:
-          node-version-file: "./.nvmrc"
+          node-version-file: "./frontend/.nvmrc"
 
       - name: Install Dependencies
         run: yarn install --non-interactive --frozen-lockfile
@@ -29,10 +32,10 @@ jobs:
         run: yarn typecheck
 
       - name: Lint & Formatting
-        run: yarn lint
+        run: yarn --cwd frontend lint
 
       - name: Unit and Integration Test
         run: yarn test
 
       - name: Build for production
-        run: yarn build
+        run: yarn --cwd frontend build
