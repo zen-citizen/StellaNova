@@ -1,5 +1,7 @@
 # Contributing a New City
 
+This guide assumes that you already have the required boundaries and properties (as a GeoJSON) for that data that you want to add. If you need help finding this data, please look over here
+
 Adding a new city involves creating GeoJSON boundary files and implementing a city provider. We'll start with a simple example and then look at more complex cases.
 
 > [!TIP]
