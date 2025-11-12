@@ -1,9 +1,20 @@
+import { useState } from "react"
 import useAppContext from "../hooks/useAppContext"
 import Accordion from "./Accordion"
 import Table from "./Table"
 
 function Details() {
   const { loading, error, entities, address, setView } = useAppContext()
+  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
+    {}
+  )
+
+  const handleToggle = (entityName: string, open: boolean) => {
+    setOpenAccordions((prev) => ({
+      ...prev,
+      [entityName]: open
+    }))
+  }
 
   const handleGoBack = () => {
     setView("introduction")
@@ -13,16 +24,16 @@ function Details() {
     <div className="flex flex-col gap-4 items-start">
       <button
         onClick={handleGoBack}
-        className="text-blue-500 underline hover:text-blue-700 transition-colors"
+        className="text-secondary underline underline-offset-3 hover:opacity-75 transition-opacity ease-in duration-100 cursor-pointer"
       >
         ← Go back
       </button>
 
       {loading && <div>Loading...</div>}
-      {error && <div className="text-red-500">{error}</div>}
+      {error && <div className="text-error">{error}</div>}
       {address && (
         <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-semibold">Address</h2>
+          <h2 className="text-heading-s font-semibold text-primary">Address</h2>
           <p>{address}</p>
         </div>
       )}
@@ -32,9 +43,16 @@ function Details() {
             <Accordion
               key={entity.name}
               title={entity.name}
-              defaultOpen={index === 0}
+              open={openAccordions[entity.name] ?? index === 0}
+              onToggle={(open) => {
+                handleToggle(entity.name, open)
+              }}
             >
-              <Table attributes={entity.attributes} />
+              {entity.is_available ? (
+                <Table attributes={entity.attributes} />
+              ) : (
+                <div className="py-2">{entity.not_available_message}</div>
+              )}
             </Accordion>
           ))}
         </div>

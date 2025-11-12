@@ -1,4 +1,4 @@
-import MapContainer from "./components/MapContainer"
+import Map from "./components/Map"
 import Search from "./components/Search"
 import Sidebar from "./components/Sidebar"
 
@@ -12,7 +12,7 @@ function App() {
 
         <div className="relative">
           <Search />
-          <MapContainer />
+          <Map />
         </div>
       </div>
 

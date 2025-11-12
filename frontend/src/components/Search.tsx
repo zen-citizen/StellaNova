@@ -68,7 +68,7 @@ function Search() {
 
   return (
     <div className="absolute top-4 left-6 right-18 z-50">
-      <Combobox onChange={handleSelect}>
+      <Combobox value={null} onChange={handleSelect}>
         <div className="relative">
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
             <SearchIcon className="w-5 h-5 text-accent" />

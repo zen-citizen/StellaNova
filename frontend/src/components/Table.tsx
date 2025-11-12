@@ -17,7 +17,7 @@ function Table(props: TableProps) {
             >
               {attribute.name}
             </th>
-            <td className="text-primary text-body-m flex flex-col gap-2">
+            <td className="text-secondary text-body-m flex flex-col gap-2">
               <span className="font-semibold">{attribute.value}</span>
               {attribute.address && (
                 <>

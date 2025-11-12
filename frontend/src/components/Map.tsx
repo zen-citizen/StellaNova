@@ -3,7 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css"
 import { useEffect, useRef } from "react"
 import useAppContext from "../hooks/useAppContext"
 
-function MapContainer() {
+function Map() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markerRef = useRef<maplibregl.Marker | null>(null)
@@ -31,6 +31,23 @@ function MapContainer() {
       new maplibregl.NavigationControl({ showCompass: false, showZoom: true }),
       "top-right"
     )
+
+    const geolocateControl = new maplibregl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true }
+    })
+
+    geolocateControl.on("geolocate", (position) => {
+      setLocation(
+        Number(position.coords.latitude.toFixed(5)),
+        Number(position.coords.longitude.toFixed(5)),
+        "geolocate"
+      )
+    })
+    geolocateControl.on("outofmaxbounds", () => {
+      alert("Your location is outside of Bengaluru")
+    })
+
+    map.addControl(geolocateControl, "top-right")
 
     map.dragRotate.disable()
     map.touchZoomRotate.disableRotation()
@@ -80,4 +97,4 @@ function MapContainer() {
   return <div ref={mapContainerRef} className="h-[50dvh] w-full md:h-full " />
 }
 
-export default MapContainer
+export default Map

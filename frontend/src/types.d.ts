@@ -32,7 +32,7 @@ export type Location = {
 
 export type View = "introduction" | "details"
 
-export type Source = "map" | "search"
+export type Source = "map" | "search" | "geolocate"
 
 export type AddressResponse = {
   results: {
