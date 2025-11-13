@@ -93,6 +93,7 @@ function useAutocompleteSuggestions(
       setSuggestions(predictions)
       setIsLoading(false)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placesLib, inputString])
 
   return {

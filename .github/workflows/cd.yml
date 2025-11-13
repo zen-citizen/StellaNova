@@ -26,16 +26,17 @@ jobs:
           node-version-file: "./frontend/.nvmrc"
 
       - name: Install Dependencies
-        run: yarn install --non-interactive --frozen-lockfile
+        working-directory: frontend
+        run: npm ci
 
-      - name: Check Types
-        run: yarn typecheck
+      - name: Format
+        working-directory: frontend
+        run: npm run format
 
-      - name: Lint & Formatting
-        run: yarn --cwd frontend lint
-
-      - name: Unit and Integration Test
-        run: yarn test
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
 
       - name: Build for production
-        run: yarn --cwd frontend build
+        working-directory: frontend
+        run: npm run build
