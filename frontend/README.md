@@ -1,73 +1,107 @@
-# React + TypeScript + Vite
+# StellaNova Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a React application built with Vite and TypeScript.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Styling with custom design tokens
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **@vis.gl/react-google-maps** - Google Maps integration
+- **MapLibre GL** - Map rendering
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Install Node Version
 
-## Expanding the ESLint configuration
+Use the Node version listed in the `.nvmrc` file or if you have nvm installed, run:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-])
+```bash
+nvm use
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x"
-import reactDom from "eslint-plugin-react-dom"
-
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-])
+```bash
+npm install
 ```
+
+### 3. Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+VITE_GMAPS_API_KEY=your_google_maps_api_key_here
+VITE_API_BASE_URL=https://api.stellanova.zencitizen.in
+```
+
+### 4. Run Development Server
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173` (or the port Vite assigns).
+
+## Available Scripts
+
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run preview` - Preview the production build locally
+- `npm run lint` - Run ESLint to check for code issues
+- `npm run format` - Format code using Prettier
+
+## Architecture
+
+### Project Structure
+
+```
+src/
+├── api.ts                 # API functions for fetching entities and addresses
+├── App.tsx                # Main application component
+├── main.tsx               # Application entry point with providers
+├── styles.css             # Global styles and Tailwind design tokens
+├── types.d.ts             # TypeScript type definitions
+├── components/            # React components
+│   ├── Accordion.tsx      # Accordion UI component
+│   ├── Details.tsx        # Details view component
+│   ├── Introduction.tsx   # Introduction/welcome view
+│   ├── Map.tsx            # Map component with location markers
+│   ├── Search.tsx         # Search input component
+│   ├── Sidebar.tsx        # Main sidebar container
+│   ├── SidebarContent.tsx # Sidebar content wrapper
+│   ├── SidebarFooter.tsx  # Sidebar footer component
+│   ├── SidebarHeader.tsx  # Sidebar header component
+│   └── Table.tsx          # Table component for displaying entities
+├── contexts/              # React context providers
+│   └── AppContext.tsx     # Global application state management
+└── hooks/                 # Custom React hooks
+    ├── useAppContext.ts   # Hook for accessing app context
+    ├── useAutocompleteSuggestions.ts # Autocomplete functionality
+    └── useGeocoder.ts     # Google Maps geocoder hook
+```
+
+### Architecture Patterns
+
+- **Context API**: Global state management via `AppContext` for location, entities, address, and view state
+- **Custom Hooks**: Reusable logic extracted into custom hooks (`useAppContext`, `useGeocoder`, `useAutocompleteSuggestions`)
+- **Components**: Modular components organized by feature (Sidebar, Map, Search)
+- **Type Safety**: Centralized type definitions in `types.d.ts`
+- **API Layer**: Separated API functions in `api.ts` for data fetching
+
+### Application Flow
+
+1. **Entry Point** (`main.tsx`): Wraps the app with `APIProvider` (Google Maps) and `AppProvider` (app state)
+2. **Main App** (`App.tsx`): Renders the layout with Sidebar and Map components
+3. **State Management**: `AppContext` manages location selection, entity fetching, and view switching
+4. **User Interactions**: Users can search, click on the map, or use geolocation to set a location
+5. **Data Fetching**: When a location is set, the app fetches entities and address information in parallel
+6. **View Rendering**: The sidebar displays either an introduction view or details view based on the current state
+
+## Styling
+
+The application uses **Tailwind CSS v4** with custom design tokens defined in `src/styles.css`.
+All design tokens are available as CSS custom properties and can be used throughout the application via Tailwind utilities.
