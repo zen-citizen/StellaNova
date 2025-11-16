@@ -4,20 +4,14 @@ import Sidebar from "./components/Sidebar"
 
 function App() {
   return (
-    <div>
-      <div className="grid md:h-screen grid-rows-[1fr_auto] md:grid-cols-[480px_1fr] md:grid-rows-1">
-        <div className="hidden md:block">
-          <Sidebar />
-        </div>
-
-        <div className="relative">
-          <Search />
-          <Map />
-        </div>
+    <div className="grid md:h-screen md:grid-cols-[480px_1fr]">
+      <div className="order-1 md:order-0">
+        <Sidebar />
       </div>
 
-      <div className="w-full md:hidden">
-        <Sidebar />
+      <div className="relative">
+        <Search />
+        <Map />
       </div>
     </div>
   )
