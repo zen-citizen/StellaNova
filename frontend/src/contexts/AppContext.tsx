@@ -1,5 +1,6 @@
 import { createContext, type ReactNode, useCallback, useState } from "react"
 import { fetchAddress, fetchEntities } from "../api"
+import useGeocoder from "../hooks/useGeocoder"
 import type { Entity, Location, Source, View } from "../types"
 
 type AppContextType = {
@@ -25,6 +26,8 @@ function getErrorMessage(err: unknown): string {
 }
 
 function AppProvider({ children }: AppProviderProps) {
+  const { geocoder } = useGeocoder()
+
   const [location, setLocationState] = useState<Location | null>(null)
   const [source, setSource] = useState<Source | null>(null)
   const [entities, setEntities] = useState<Entity[] | null>(null)
@@ -47,7 +50,7 @@ function AppProvider({ children }: AppProviderProps) {
       try {
         const results = await Promise.allSettled([
           fetchEntities(lat, lng),
-          fetchAddress(lat, lng)
+          fetchAddress(lat, lng, geocoder)
         ])
 
         let firstError: string | null = null
@@ -82,7 +85,7 @@ function AppProvider({ children }: AppProviderProps) {
         setLoading(false)
       }
     },
-    []
+    [geocoder]
   )
 
   const value: AppContextType = {

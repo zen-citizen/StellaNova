@@ -1,12 +1,8 @@
-import type {
-  AddressResponse,
-  EntitiesError,
-  EntitiesResponse,
-  Entity
-} from "./types"
+import type { EntitiesError, EntitiesResponse, Entity } from "./types"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-const GMAPS_API_KEY = import.meta.env.VITE_GMAPS_API_KEY
+
+type Geocoder = google.maps.Geocoder
 
 async function fetchEntities(lat: number, lng: number): Promise<Entity[]> {
   const response = await fetch(
@@ -28,19 +24,24 @@ async function fetchEntities(lat: number, lng: number): Promise<Entity[]> {
   return entitiesResponse.entities
 }
 
-async function fetchAddress(lat: number, lng: number): Promise<string> {
-  const response = await fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GMAPS_API_KEY}`
-  )
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
+async function fetchAddress(
+  lat: number,
+  lng: number,
+  geocoder: Geocoder | null
+): Promise<string> {
+  if (!geocoder) {
+    throw new Error("Geocoder not initialized")
   }
 
-  const result = (await response.json()) as AddressResponse
+  const response = await geocoder.geocode({
+    location: {
+      lat: lat,
+      lng: lng
+    }
+  })
 
-  if (result.results && result.results.length > 0) {
-    return result.results[0].formatted_address
+  if (response.results && response.results.length > 0) {
+    return response.results[0].formatted_address
   } else {
     return "No address found"
   }
