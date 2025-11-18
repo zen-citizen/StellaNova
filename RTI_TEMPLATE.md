@@ -3,7 +3,7 @@
 > [!TIP]
 > Find our online guide to submitting an RTI request [here](https://zencitizen.in/2025/03/10/online-rti-for-delayed-government-service/)
 
-```aiignore
+## Template
 I request the following information under Section 6(1) of the RTI Act, 2005.
 
 2.Please provide the following data with the following attributes related to <Government Department such as Electricity, Water, Law & Order, Revenue> 
@@ -24,5 +24,3 @@ I request the following information under Section 6(1) of the RTI Act, 2005.
 7. As per section 7(8)(iii) and 7(3)(ii) of the RTI Act 2005, I request the PIO to inform me of the particulars of First Appellate Authority.
 
 8. Please provide the information within the stipulated time of 30 days.
-
-```
