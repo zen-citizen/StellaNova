@@ -92,12 +92,11 @@ func (p *BengaluruProvider) getGBAEntity(ctx context.Context, lat, lng float64) 
 func (p *BengaluruProvider) getBBMPEntity(ctx context.Context, lat, lng float64) *models.Entity {
 	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "bbmp", func(props map[string]interface{}) ([]models.Attribute, error) {
 		ward := getStringAttribute(props, "Ward Name", "ward_name", "")
-		wardNumber := getStringAttribute(props, "Ward Number", "ward_number", "")
 		zone := getStringAttribute(props, "Zone", "zone", "")
 		division := getStringAttribute(props, "Division", "division", "")
 		subdivision := getStringAttribute(props, "Subdivision", "subdivision", "")
 
-		return []models.Attribute{*ward, *wardNumber, *zone, *division, *subdivision}, nil
+		return []models.Attribute{*ward, *zone, *division, *subdivision}, nil
 	}, p.logger)
 
 	disclaimer := "This information is based on the 198-ward classification, which BBMP used as a reference until the GBA was formed."
