@@ -345,9 +345,7 @@ func getAddressAttribute(data map[string]interface{}, name, key, valueDefault, a
 }
 
 func (p *BengaluruProvider) getConstituencyEntity(ctx context.Context, lat, lng float64) *models.Entity {
-	attributes := append(
-		utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "constituency", nil, p.logger),
-	)
+	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "constituency", nil, p.logger)
 
 	entity := utils.BuildEntity(ctx, "Constituency",
 		"This information is unavailable for this address. This could be because the area is outside Bengaluru Constituency limits.",
