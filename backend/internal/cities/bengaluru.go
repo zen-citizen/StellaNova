@@ -72,6 +72,10 @@ func (p *BengaluruProvider) GetEntities(ctx context.Context, lat, lng float64) (
 		entities = append(entities, *entity)
 	}
 
+	if entity := p.getConstituencyEntity(ctx, lat, lng); entity != nil {
+		entities = append(entities, *entity)
+	}
+
 	return entities, nil
 }
 
@@ -338,4 +342,17 @@ func getAddressAttribute(data map[string]interface{}, name, key, valueDefault, a
 
 	attribute.Address = &address
 	return attribute
+}
+
+func (p *BengaluruProvider) getConstituencyEntity(ctx context.Context, lat, lng float64) *models.Entity {
+	attributes := append(
+		utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "constituency", nil, p.logger),
+	)
+
+	entity := utils.BuildEntity(ctx, "Constituency",
+		"This information is unavailable for this address. This could be because the area is outside Bengaluru Constituency limits.",
+		nil,
+		attributes, p.logger)
+
+	return &entity
 }
