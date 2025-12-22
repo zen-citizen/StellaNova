@@ -72,7 +72,11 @@ func (p *BengaluruProvider) GetEntities(ctx context.Context, lat, lng float64) (
 		entities = append(entities, *entity)
 	}
 
-	if entity := p.getConstituencyEntity(ctx, lat, lng); entity != nil {
+	if entity := p.getAssemblyConstituencyEntity(ctx, lat, lng); entity != nil {
+		entities = append(entities, *entity)
+	}
+
+	if entity := p.getParliamentaryConstituencyEntity(ctx, lat, lng); entity != nil {
 		entities = append(entities, *entity)
 	}
 
@@ -344,11 +348,22 @@ func getAddressAttribute(data map[string]interface{}, name, key, valueDefault, a
 	return attribute
 }
 
-func (p *BengaluruProvider) getConstituencyEntity(ctx context.Context, lat, lng float64) *models.Entity {
-	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "constituency", nil, p.logger)
+func (p *BengaluruProvider) getAssemblyConstituencyEntity(ctx context.Context, lat, lng float64) *models.Entity {
+	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "assembly_constituency", nil, p.logger)
 
-	entity := utils.BuildEntity(ctx, "Constituency",
-		"This information is unavailable for this address. This could be because the area is outside Bengaluru Constituency limits.",
+	entity := utils.BuildEntity(ctx, "Assembly Constituency",
+		"This information is unavailable for this address. This could be because the area is outside Bengaluru Assembly Constituency limits.",
+		nil,
+		attributes, p.logger)
+
+	return &entity
+}
+
+func (p *BengaluruProvider) getParliamentaryConstituencyEntity(ctx context.Context, lat, lng float64) *models.Entity {
+	attributes := utils.ExtractAttributes(ctx, p.geoManager, lat, lng, p.Name(), "parliamentary_constituency", nil, p.logger)
+
+	entity := utils.BuildEntity(ctx, "Parliamentary Constituency",
+		"This information is unavailable for this address. This could be because the area is outside Bengaluru Parliamentary Constituency limits.",
 		nil,
 		attributes, p.logger)
 
