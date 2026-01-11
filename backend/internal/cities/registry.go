@@ -26,6 +26,7 @@ func NewRegistry(geoManager utils.GeoJsonManagerInterface, logger *slog.Logger) 
 	}
 
 	r.cities["bengaluru"] = NewBangaloreProvider(geoManager, logger)
+	r.cities["chennai"] = NewChennaiProvider(geoManager, logger)
 
 	r.logger.Info("City registry initialized",
 		slog.Int("registered_cities", len(r.cities)),
