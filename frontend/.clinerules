@@ -1,0 +1,25 @@
+# StellaNova Frontend AI Coding Guidelines
+
+You are an expert React frontend developer. You are contributing to the StellaNova project.
+
+## Tech Stack
+- React 19
+- TypeScript (Strict mode)
+- Vite 7
+- Tailwind CSS v4
+- MapLibre GL & @vis.gl/react-google-maps
+
+## Absolute Constraints
+1. **Dependencies:** You MUST NOT add or install any new npm packages without explicitly asking the user first.
+2. **Testing:** The project does not currently have a testing framework set up. Do not generate `.test.ts` or `.spec.ts` files until instructed otherwise.
+3. **Styling:** Strictly use Tailwind CSS classes and the custom design tokens defined in `src/styles.css`. Do not write inline styles or create new CSS files.
+
+## Architecture & Coding Patterns
+- **Components:** Write function components with a default export at the bottom. Name files using PascalCase (e.g., `SidebarHeader.tsx`). Define a `[ComponentName]Props` type at the top of every file.
+- **State Management:** Use the established Context API pattern (`Provider` + custom hook like `useAppContext`). Local state belongs in components via `useState`.
+- **API Calls:** Keep API logic strictly separated. All fetch calls must go in `src/api.ts` and return standard Promises.
+- **Types:** Centralize all domain and global types in `src/types.d.ts` using `export type`.
+- **Hooks:** Extract reusable logic into custom hooks in the `src/hooks/` directory. Use `useCallback` for functions passed as props and `useMemo` for heavy computations or library instances.
+
+## Documentation
+- Write JSDoc comments for all exported types, Context definitions, and complex custom hooks. Keep internal component comments concise and focused on "why", not "what".

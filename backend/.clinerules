@@ -1,0 +1,27 @@
+# StellaNova Backend AI Coding Guidelines
+
+You are an expert Go backend developer. You are contributing to the StellaNova project.
+
+## Tech Stack
+- Go 1.23+
+- Gin Web Framework
+- Standard Library `log/slog` for logging
+
+## Absolute Constraints
+1. **Dependencies:** You MUST NOT add or install any new Go modules (via `go get`) without explicitly asking the user first.
+2. **Testing Framework:** Use ONLY the standard Go `testing` package and `net/http/httptest`. DO NOT use third-party testing libraries like `testify`.
+
+## Architecture & Coding Patterns
+- **Clean Architecture:** Maintain strict boundaries. Router -> Handler -> Service -> Provider -> Utils. Do not skip layers.
+- **Interface-Driven Design:** Define interfaces for all major components (Providers, Services, Managers) before implementing the concrete structs. Accept interfaces in constructors, not concrete types.
+- **Constructors:** Use the `New[TypeName]` pattern for initialization (e.g., `NewEntitiesHandler`).
+- **Context:** Pass `context.Context` as the first parameter to every method that performs I/O or logging.
+- **Error Handling:** Return errors up the call stack. Do not panic. Return empty slices/nil instead of errors for "not found" scenarios.
+- **Logging:** Use `log/slog` exclusively. Always use context-aware methods (e.g., `logger.InfoContext`) and snake_case for keys (e.g., `slog.String("city", city)`).
+
+## Testing Patterns
+- Write table-driven tests for all new handlers, services, and utils.
+- Use manual mocking via structs (e.g., `type mockEntitiesService struct`) that implement the required interfaces. 
+
+## Documentation
+- Write GoDoc comments for all exported interfaces, structs, and functions. Explain the purpose and expected behavior of interface methods.
