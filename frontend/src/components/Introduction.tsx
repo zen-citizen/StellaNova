@@ -4,8 +4,8 @@ function Introduction() {
       <section className="prose">
         <p>
           If you're a Bengaluru resident, you can use Civic Compass to identify
-          the GBA (BBMP), BDA, Revenue, BESCOM, BWSSB offices, and Police
-          stations for your area.
+          the GBA (BBMP), BDA, Revenue, BESCOM, BWSSB offices, Police
+          stations, and Post Offices for your area.
         </p>
 
         <p>

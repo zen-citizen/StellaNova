@@ -3,20 +3,57 @@ package cities
 import (
 	"backend/internal/models"
 	"backend/internal/utils"
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log/slog"
+	"net/http"
+	"strings"
+	"time"
 )
+
+const indiaPostAPIURL = "https://dac.indiapost.gov.in/mypincode/home"
+const indiaPostNextAction = "7f86f11580f1032603e2574b88b30708b68ae17e9d"
+
+type indiaPostResponse struct {
+	Data    []indiaPostOffice `json:"data"`
+	Success bool              `json:"success"`
+}
+
+type indiaPostOffice struct {
+	OfficeName    string `json:"office_name"`
+	Pincode       string `json:"pincode"`
+	DivisionName  string `json:"division_name"`
+	RegionName    string `json:"region_name"`
+	CircleName    string `json:"circle_name"`
+	Taluk         string `json:"taluk"`
+	DistrictName  string `json:"district_name"`
+	StateName     string `json:"state_name"`
+	WorkingHours  string `json:"working_hours"`
+	ContactNumber string `json:"contact_number"`
+	OfficeType    string `json:"office_type"`
+	DeliveryStatus string `json:"delivery_status"`
+}
+
+type httpClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
 
 type BengaluruProvider struct {
 	logger     *slog.Logger
 	geoManager utils.GeoJsonManagerInterface
+	httpClient httpClient
 }
 
 func NewBangaloreProvider(geoManager utils.GeoJsonManagerInterface, logger *slog.Logger) *BengaluruProvider {
 	return &BengaluruProvider{
 		logger:     logger,
 		geoManager: geoManager,
+		httpClient: &http.Client{
+			Timeout: 10 * time.Second,
+		},
 	}
 }
 
@@ -77,6 +114,10 @@ func (p *BengaluruProvider) GetEntities(ctx context.Context, lat, lng float64) (
 	}
 
 	if entity := p.getParliamentaryConstituencyEntity(ctx, lat, lng); entity != nil {
+		entities = append(entities, *entity)
+	}
+
+	if entity := p.getPostOfficeEntity(ctx, lat, lng); entity != nil {
 		entities = append(entities, *entity)
 	}
 
@@ -368,4 +409,209 @@ func (p *BengaluruProvider) getParliamentaryConstituencyEntity(ctx context.Conte
 		attributes, p.logger)
 
 	return &entity
+}
+
+func (p *BengaluruProvider) getPostOfficeEntity(ctx context.Context, lat, lng float64) *models.Entity {
+	offices, err := p.fetchIndiaPostOffices(ctx, lat, lng)
+	if err != nil {
+		p.logger.WarnContext(ctx, "failed to fetch post office data",
+			slog.Any("error", err),
+			slog.Float64("lat", lat),
+			slog.Float64("lng", lng),
+		)
+		entity := models.NewUnavailableEntity("Post Office",
+			"This information is unavailable for this address. This could be because the India Post API is temporarily unavailable.",
+			nil,
+		)
+		return &entity
+	}
+
+	if len(offices) == 0 {
+		p.logger.InfoContext(ctx, "no post offices found for location",
+			slog.Float64("lat", lat),
+			slog.Float64("lng", lng),
+		)
+		entity := models.NewUnavailableEntity("Post Office",
+			"No post office information found for this location.",
+			nil,
+		)
+		return &entity
+	}
+
+	var attributes []models.Attribute
+	for i, office := range offices {
+		attributes = append(attributes, extractPostOfficeAttributes(office, i)...)
+	}
+
+	entity := utils.BuildEntity(ctx, "Post Office",
+		"This information is unavailable for this address. This could be because the India Post API is temporarily unavailable.",
+		nil,
+		attributes, p.logger)
+
+	return &entity
+}
+
+func (p *BengaluruProvider) fetchIndiaPostOffices(ctx context.Context, lat, lng float64) ([]indiaPostOffice, error) {
+	payload := fmt.Sprintf("[[%f,%f]]", lat, lng)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, indiaPostAPIURL, bytes.NewBufferString(payload))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Next-Action", indiaPostNextAction)
+	req.Header.Set("content-type", "text/plain")
+
+	resp, err := p.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to send request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	offices, err := parseNextJSStreamResponse(body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse response: %w", err)
+	}
+
+	return offices, nil
+}
+
+func parseNextJSStreamResponse(body []byte) ([]indiaPostOffice, error) {
+	lines := strings.Split(string(body), "\n")
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "1:") {
+			jsonStr := strings.TrimPrefix(line, "1:")
+
+			var response indiaPostResponse
+			if err := json.Unmarshal([]byte(jsonStr), &response); err != nil {
+				return nil, fmt.Errorf("failed to unmarshal JSON: %w", err)
+			}
+
+			if !response.Success {
+				return nil, fmt.Errorf("API returned success=false")
+			}
+
+			return response.Data, nil
+		}
+	}
+
+	return nil, fmt.Errorf("no data line found in Next.js stream response")
+}
+
+func extractPostOfficeAttributes(office indiaPostOffice, index int) []models.Attribute {
+	var attributes []models.Attribute
+
+	prefix := ""
+	if index > 0 {
+		prefix = fmt.Sprintf(" (Office %d)", index+1)
+	}
+
+	if office.OfficeName != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Office Name%s", prefix),
+			Value:   office.OfficeName,
+			IsFound: true,
+		})
+	}
+
+	if office.Pincode != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("PIN Code%s", prefix),
+			Value:   office.Pincode,
+			IsFound: true,
+		})
+	}
+
+	if office.DivisionName != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Division%s", prefix),
+			Value:   office.DivisionName,
+			IsFound: true,
+		})
+	}
+
+	if office.RegionName != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Region%s", prefix),
+			Value:   office.RegionName,
+			IsFound: true,
+		})
+	}
+
+	if office.CircleName != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Circle%s", prefix),
+			Value:   office.CircleName,
+			IsFound: true,
+		})
+	}
+
+	if office.Taluk != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Taluk%s", prefix),
+			Value:   office.Taluk,
+			IsFound: true,
+		})
+	}
+
+	if office.DistrictName != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("District%s", prefix),
+			Value:   office.DistrictName,
+			IsFound: true,
+		})
+	}
+
+	if office.StateName != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("State%s", prefix),
+			Value:   office.StateName,
+			IsFound: true,
+		})
+	}
+
+	if office.OfficeType != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Office Type%s", prefix),
+			Value:   office.OfficeType,
+			IsFound: true,
+		})
+	}
+
+	if office.DeliveryStatus != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Delivery Status%s", prefix),
+			Value:   office.DeliveryStatus,
+			IsFound: true,
+		})
+	}
+
+	if office.WorkingHours != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Working Hours%s", prefix),
+			Value:   office.WorkingHours,
+			IsFound: true,
+		})
+	}
+
+	if office.ContactNumber != "" {
+		attributes = append(attributes, models.Attribute{
+			Name:    fmt.Sprintf("Contact Number%s", prefix),
+			Value:   office.ContactNumber,
+			IsFound: true,
+		})
+	}
+
+	return attributes
 }

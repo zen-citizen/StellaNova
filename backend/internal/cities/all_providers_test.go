@@ -135,6 +135,11 @@ func RunUniversalCityProviderTests(t *testing.T, cityName string) {
 			}
 
 			for _, entity := range entities {
+				// Skip Post Office entity as it uses external HTTP API, not GeoJSON
+				if entity.Name == "Post Office" {
+					continue
+				}
+
 				if entity.IsAvailable {
 					t.Errorf("Entity '%s' should not be available when all layers return nil", entity.Name)
 				}
@@ -181,6 +186,11 @@ func testLayerScenarios(t *testing.T, provider CityProvider, mock *InstrumentedM
 		}
 
 		for _, entity := range entities {
+			// Skip Post Office entity as it uses external HTTP API, not GeoJSON
+			if entity.Name == "Post Office" {
+				continue
+			}
+
 			if entity.IsAvailable {
 				t.Errorf("Entity '%s' should not be available with nil response", entity.Name)
 			}
